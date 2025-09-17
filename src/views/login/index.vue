@@ -1,5 +1,7 @@
 <template>
   <div class="login-container">
+    <video class="bg-video" autoplay muted loop playsinline src="@/assets/bg.mp4"></video>
+    <div class="bg-mask"></div>
     <div class="login-box">
       <div class="login-form-container">
         <div class="logo-container">
@@ -52,7 +54,6 @@
 
           <div class="form-actions">
             <el-checkbox v-model="rememberMe">记住我</el-checkbox>
-            <a href="javascript:;" class="forgot-password">忘记密码?</a>
           </div>
 
           <el-button
@@ -64,31 +65,10 @@
             登录
           </el-button>
 
-          <div class="demo-login">
-            <el-button
-              :loading="demoLoading"
-              type="info"
-              class="demo-button"
-              @click.prevent="handleDemoLogin"
-            >
-              一键演示登录
-            </el-button>
-          </div>
-
           <div class="register-link">
-            <span>还没有账号?</span>
-            <router-link to="/register" class="create-account">
-              立即注册
-            </router-link>
+            <span class="create-account">请联系管理员处理账号问题</span>
           </div>
         </el-form>
-      </div>
-
-      <div class="login-image">
-        <div class="overlay">
-          <h2 class="slogan">高效 · 便捷 · 安全</h2>
-          <p class="description">AI 能力试验验证系统</p>
-        </div>
       </div>
     </div>
   </div>
@@ -130,7 +110,6 @@ const state = reactive({
     ],
   },
   loading: false,
-  demoLoading: false,
   passwordType: "password",
   redirect: undefined,
 });
@@ -201,67 +180,60 @@ onMounted(() => {
   }
 });
 
-// 处理演示登录
-const handleDemoLogin = async () => {
-  state.demoLoading = true;
-  try {
-    // 使用预设的演示账号信息
-    const demoUser = {
-      username: "viewer",
-      password: "123456"
-    };
-
-    // 调用登录接口
-    await store.dispatch("user/login", demoUser);
-
-    // 登录成功后跳转
-    const { query } = router.currentRoute.value;
-    const targetPath = query.redirect || "/";
-
-    router.replace({
-      path: targetPath,
-      query: otherQuery.value,
-    });
-
-    ElMessage.success(`欢迎使用演示账号，您将以只读权限访问系统`);
-  } catch (error) {
-    console.error("演示登录失败:", error);
-    ElMessage.error(error.message || "演示登录失败");
-  } finally {
-    state.demoLoading = false;
-  }
-};
+// 已移除演示登录功能
 
 // 暴露给模板的变量
-const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(state);
+const { form, rules, loading, passwordType, redirect } = toRefs(state);
 </script>
 
 <style lang="scss" scoped>
 .login-container {
   height: 100vh;
   width: 100vw;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow: hidden;
+  background: #000;
+}
+
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  filter: saturate(1.15) contrast(1.08) brightness(1.1);
+}
+
+.bg-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(80% 100% at 50% 0%, rgba(8, 20, 16, 0.58) 0%, rgba(8, 20, 16, 0.38) 60%, rgba(8, 17, 14, 0.42) 100%);
 }
 
 .login-box {
-  width: 80%;
-  max-width: 1000px;
-  height: 700px;
+  width: 420px;
+  max-width: 90vw;
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  display: flex;
-  background-color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 255, 170, 0.12), inset 0 0 30px rgba(0, 255, 170, 0.05);
+  background: rgba(8, 20, 16, 0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 255, 170, 0.18);
+  position: relative;
+  z-index: 2;
 }
 
 .login-form-container {
-  width: 50%;
-  padding: 50px;
+  width: 100%;
+  padding: 40px 36px 30px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .logo-container {
@@ -270,14 +242,14 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
 
   .welcome-text {
     font-size: 28px;
-    color: #333;
+    color: #b3ffea;
     margin-bottom: 10px;
     font-weight: 600;
   }
 
   .system-title {
     font-size: 18px;
-    color: #666;
+    color: #7adec8;
     font-weight: 400;
   }
 }
@@ -294,12 +266,21 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
 
     :deep(.el-input__wrapper) {
       padding-left: 15px;
-      box-shadow: 0 0 0 1px #dcdfe6 inset;
+      box-shadow: 0 0 0 1px rgba(0, 255, 170, 0.15) inset, 0 0 0 rgba(0, 0, 0, 0);
+      background-color: rgba(10, 25, 20, 0.5);
+      transition: box-shadow 0.2s ease, background-color 0.2s ease;
     }
 
     :deep(.el-input__prefix) {
-      color: #909399;
+      color: #57e6c0;
       font-size: 18px;
+    }
+
+    :deep(.is-focus .el-input__wrapper),
+    :deep(.el-input__wrapper.is-focus),
+    :deep(.el-input__wrapper:hover) {
+      box-shadow: 0 0 0 1px rgba(0, 255, 170, 0.35) inset, 0 0 12px rgba(0, 255, 170, 0.25);
+      background-color: rgba(10, 25, 20, 0.65);
     }
   }
 
@@ -308,7 +289,7 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
     right: 15px;
     top: 14px;
     font-size: 16px;
-    color: #889aa4;
+    color: #84f0d3;
     cursor: pointer;
     user-select: none;
   }
@@ -316,17 +297,10 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 20px;
 
-  .forgot-password {
-    color: #409eff;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  .forgot-password { display: none; }
 }
 
 .login-button {
@@ -336,12 +310,13 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1px;
-  background: linear-gradient(90deg, #409eff 0%, #007aff 100%);
+  background: linear-gradient(90deg, #00d1a0 0%, #00ffcc 100%);
   border: none;
   margin-top: 10px;
 
   &:hover {
-    background: linear-gradient(90deg, #007aff 0%, #409eff 100%);
+    background: linear-gradient(90deg, #00ffcc 0%, #00d1a0 100%);
+    box-shadow: 0 0 18px rgba(0, 255, 204, 0.35);
   }
 }
 
@@ -354,6 +329,9 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
     height: 40px;
     border-radius: 25px;
     font-size: 14px;
+    background: rgba(0, 255, 170, 0.08);
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    color: #9cf7e4;
   }
 }
 
@@ -361,10 +339,10 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
   margin-top: 20px;
   text-align: center;
   font-size: 14px;
-  color: #606266;
+  color: #9bdacb;
 
   .create-account {
-    color: #409eff;
+    color: #49f2c6;
     text-decoration: none;
     margin-left: 5px;
 
@@ -374,61 +352,14 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
   }
 }
 
-.login-image {
-  width: 50%;
-  position: relative;
-  background: url("~@/assets/login_images/background.jpg") center center
-    no-repeat;
-  background-size: cover;
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-
-    .slogan {
-      color: #fff;
-      font-size: 32px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .description {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 16px;
-      text-align: center;
-    }
-  }
-}
+/* 移除右侧图片列，视频已作为全局背景 */
 
 // 响应式设计
 @media screen and (max-width: 992px) {
   .login-box {
-    width: 100%;
-    max-width: 100%;
-    flex-direction: column;
-    height: auto;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .login-form-container,
-  .login-image {
-    width: 100%;
-  }
-
-  .login-image {
-    height: 200px;
-    order: -1;
+    width: 92vw;
+    max-width: 520px;
   }
 }
 
@@ -436,15 +367,12 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
   .login-container {
     padding: 0;
     height: 100%;
-    background: #fff;
+    background: transparent;
   }
 
   .login-box {
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-    border-radius: 0;
-    box-shadow: none;
+    width: 94vw;
+    max-width: 460px;
   }
 
   .login-form-container {
@@ -504,8 +432,5 @@ const { form, rules, loading, demoLoading, passwordType, redirect } = toRefs(sta
     padding: 15px 10px;
   }
 
-  .login-image {
-    height: 150px;
-  }
 }
 </style>

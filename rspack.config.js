@@ -134,6 +134,10 @@ module.exports = {
         },
       },
       {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/i,
+        type: "asset/resource",
+      },
+      {
         resourceQuery: /raw/,
         type: "asset/source",
       },

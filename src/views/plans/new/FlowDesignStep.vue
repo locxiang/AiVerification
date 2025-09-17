@@ -592,6 +592,9 @@ import {
   VideoPause,
   Monitor,
   Search,
+  EditPen,
+  VideoCamera,
+  UploadFilled,
   Star,
   ChatDotRound,
   Delete,
@@ -708,6 +711,27 @@ const componentLibrary = [
     icon: 'Search',
     description: '根据关键字、URL、ID查找新闻、帖子内容',
     color: '#E6A23C'
+  },
+  {
+    type: 'post_publish',
+    name: '发布动态（帖子）',
+    icon: 'EditPen',
+    description: '在指定平台发布文本/图片帖子',
+    color: '#36CFC9'
+  },
+  {
+    type: 'video_search',
+    name: '查找视频',
+    icon: 'VideoCamera',
+    description: '按条件检索各平台视频内容',
+    color: '#722ED1'
+  },
+  {
+    type: 'video_publish',
+    name: '发布视频',
+    icon: 'UploadFilled',
+    description: '向目标平台发布视频内容',
+    color: '#13C2C2'
   },
   {
     type: 'content_evaluation',
@@ -954,6 +978,30 @@ const getDefaultNodeData = (type) => {
         ids: [],
         timeRange: '24h'
       }
+    case 'post_publish':
+      return {
+        platforms: ['weibo'],
+        visibility: 'public',
+        content: '',
+        images: [],
+        scheduleEnabled: false,
+        scheduleAt: ''
+      }
+    case 'video_search':
+      return {
+        platforms: ['youtube'],
+        keywords: [],
+        durationRange: [0, 600],
+        timeRange: '7d'
+      }
+    case 'video_publish':
+      return {
+        platforms: ['youtube'],
+        title: '',
+        description: '',
+        tags: [],
+        visibility: 'unlisted'
+      }
     case 'content_evaluation':
       return {
         evaluationType: 'sentiment',
@@ -1150,6 +1198,18 @@ const getComponentDescription = (node) => {
     case 'content_search':
       const searchType = node.data.searchType || 'keyword'
       description += ` (搜索类型: ${searchType})`
+      break
+    case 'post_publish':
+      const ppPlatforms = node.data.platforms || []
+      description += ` (平台: ${ppPlatforms.join(', ') || '未选择'})`
+      break
+    case 'video_search':
+      const vsPlatforms = node.data.platforms || []
+      description += ` (平台: ${vsPlatforms.join(', ') || '未选择'})`
+      break
+    case 'video_publish':
+      const vpPlatforms = node.data.platforms || []
+      description += ` (平台: ${vpPlatforms.join(', ') || '未选择'})`
       break
     case 'content_evaluation':
       const evalType = node.data.evaluationType || 'sentiment'
