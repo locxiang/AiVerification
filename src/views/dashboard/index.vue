@@ -65,10 +65,7 @@
             <div v-else-if="trend.length === 0" class="empty-chart">
               <el-empty description="暂无趋势数据" />
             </div>
-            <div v-else class="chart-placeholder">
-              <p>图表占位：{{ trend.length }} 个数据点</p>
-              <p class="chart-data">{{ JSON.stringify(trend) }}</p>
-            </div>
+            <div v-else class="trend-chart" ref="trendChartRef"></div>
           </div>
         </el-card>
       </el-col>
@@ -141,10 +138,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus, List, DataAnalysis, Timer } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import * as echarts from 'echarts'
 
 const router = useRouter()
 
@@ -155,6 +153,10 @@ const stats = ref({ total: 0, running: 0, completed: 0, failed: 0 })
 const trend = ref([])
 const recentRuns = ref([])
 
+// 图表实例与容器
+const trendChartRef = ref(null)
+let trendChartInstance = null
+
 // 获取数据
 const fetchDashboardData = async () => {
   loading.value = true
@@ -164,13 +166,8 @@ const fetchDashboardData = async () => {
 
     // 模拟数据
     stats.value = { total: 42, running: 3, completed: 35, failed: 4 }
-    trend.value = [
-      { date: '2025-01-01', runs: 8, successRate: 0.88 },
-      { date: '2025-01-02', runs: 10, successRate: 0.9 },
-      { date: '2025-01-03', runs: 7, successRate: 0.85 },
-      { date: '2025-01-04', runs: 12, successRate: 0.92 },
-      { date: '2025-01-05', runs: 9, successRate: 0.89 },
-    ]
+    // 根据时间范围生成模拟趋势数据
+    trend.value = generateTrendData(Number(trendTimeRange.value))
     recentRuns.value = [
       { id: 'r_1001', name: '社交机器人V1综合评测', status: 'running', startedAt: '2025-01-02T09:10:00Z', durationSec: 320 },
       { id: 'r_1000', name: '对话理解-鲁棒性回归', status: 'completed', startedAt: '2025-01-01T10:00:00Z', durationSec: 580 },
@@ -182,7 +179,89 @@ const fetchDashboardData = async () => {
     ElMessage.error('获取仪表盘数据失败')
   } finally {
     loading.value = false
+    // 加载完毕后渲染图表
+    nextTickRenderChart()
   }
+}
+
+// 生成趋势数据（只模拟任务执行数量）
+const generateTrendData = (days) => {
+  const data = []
+  const now = new Date()
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(now.getDate() - i)
+    const runs = Math.max(0, Math.round(6 + Math.sin((days - i) / 2) * 4 + (Math.random() * 4 - 2)))
+    data.push({
+      date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`,
+      runs,
+    })
+  }
+  return data
+}
+
+// 初始化或更新图表
+const renderTrendChart = () => {
+  if (!trendChartRef.value) return
+  if (!trendChartInstance) {
+    trendChartInstance = echarts.init(trendChartRef.value)
+    window.addEventListener('resize', resizeChart)
+  }
+  const option = {
+    tooltip: { trigger: 'axis' },
+    grid: { left: 40, right: 20, top: 20, bottom: 40 },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: trend.value.map((i) => i.date),
+      axisLine: { lineStyle: { color: '#dcdfe6' } },
+      axisLabel: { color: '#909399' },
+    },
+    yAxis: {
+      type: 'value',
+      name: '任务数',
+      minInterval: 1,
+      axisLine: { show: false },
+      splitLine: { lineStyle: { color: '#ebeef5' } },
+      axisLabel: { color: '#909399' },
+    },
+    series: [
+      {
+        name: '执行次数',
+        type: 'line',
+        smooth: true,
+        showSymbol: false,
+        data: trend.value.map((i) => i.runs),
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(64, 158, 255, 0.35)' },
+            { offset: 1, color: 'rgba(64, 158, 255, 0.05)' },
+          ]),
+        },
+        lineStyle: { width: 2, color: '#409EFF' },
+      },
+    ],
+  }
+  trendChartInstance.setOption(option)
+}
+
+const resizeChart = () => {
+  if (trendChartInstance) trendChartInstance.resize()
+}
+
+const disposeChart = () => {
+  window.removeEventListener('resize', resizeChart)
+  if (trendChartInstance) {
+    trendChartInstance.dispose()
+    trendChartInstance = null
+  }
+}
+
+const nextTickRenderChart = () => {
+  // 等DOM可见后再渲染
+  requestAnimationFrame(() => {
+    renderTrendChart()
+  })
 }
 
 // 格式化日期时间
@@ -244,6 +323,15 @@ const goToRunsList = () => {
 // 生命周期钩子
 onMounted(() => {
   fetchDashboardData()
+})
+
+watch(trendTimeRange, async () => {
+  // 切换时间范围时刷新数据并更新图表
+  await fetchDashboardData()
+})
+
+onBeforeUnmount(() => {
+  disposeChart()
 })
 </script>
 
@@ -316,6 +404,11 @@ onMounted(() => {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .trend-chart {
+        width: 100%;
+        height: 100%;
+      }
 
       .chart-placeholder {
         text-align: center;

@@ -1,12 +1,11 @@
 <template>
   <div class="login-container">
-    <video class="bg-video" autoplay muted loop playsinline src="@/assets/bg.mp4"></video>
+    <video class="bg-video" autoplay muted loop playsinline src="@/assets/bg5.mp4"></video>
     <div class="bg-mask"></div>
     <div class="login-box">
       <div class="login-form-container">
         <div class="logo-container">
-          <h2 class="welcome-text">欢迎回来</h2>
-          <h3 class="system-title">{{ title }}</h3>
+          <div class="system-title">{{ title }}</div>
         </div>
 
         <el-form
@@ -187,13 +186,22 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
 </script>
 
 <style lang="scss" scoped>
+$accent: #3cc7ff; // 青蓝主色，贴近视频高光
+$accent-2: #6f97ff; // 渐变次色，偏蓝
+$text-strong: #eaf1ff;
+$text-muted: #b9c9e6;
+$panel-bg: rgba(12, 18, 28, 0.58); // 更冷色调的半透明底
+$panel-border: rgba(82, 170, 255, 0.18);
+$input-bg: rgba(16, 24, 36, 0.38);
+$input-bg-focus: rgba(16, 28, 44, 0.52);
+
 .login-container {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-start;
   overflow: hidden;
   background: #000;
 }
@@ -205,31 +213,44 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   height: 100vh;
   object-fit: cover;
   z-index: 0;
-  filter: saturate(1.15) contrast(1.08) brightness(1.1);
+  filter: contrast(1.0) saturate(1.12) brightness(1.12);
 }
 
 .bg-mask {
   position: fixed;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(80% 100% at 50% 0%, rgba(8, 20, 16, 0.58) 0%, rgba(8, 20, 16, 0.38) 60%, rgba(8, 17, 14, 0.42) 100%);
+  background: radial-gradient(1200px 600px at 65% 45%, rgba(0, 180, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.15));
 }
 
 .login-box {
   width: 420px;
   max-width: 90vw;
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 255, 170, 0.12), inset 0 0 30px rgba(0, 255, 170, 0.05);
-  background: rgba(8, 20, 16, 0.72);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 255, 170, 0.18);
-  position: relative;
+  position: absolute;
   z-index: 2;
+  background: $panel-bg;
+  backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid $panel-border;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 40px rgba(60, 199, 255, 0.08);
+  top: 12vh;
+  right: 6vw;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    pointer-events: none;
+    background: linear-gradient(140deg, rgba(60, 199, 255, 0.18), rgba(111, 151, 255, 0.16) 35%, transparent 60%);
+    mix-blend-mode: screen;
+  }
 }
 
 .login-form-container {
   width: 100%;
-  padding: 40px 36px 30px;
+  padding: 28px 26px 22px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -240,16 +261,11 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   margin-bottom: 40px;
   text-align: center;
 
-  .welcome-text {
-    font-size: 28px;
-    color: #b3ffea;
-    margin-bottom: 10px;
-    font-weight: 600;
-  }
+
 
   .system-title {
     font-size: 18px;
-    color: #7adec8;
+    color: $text-muted;
     font-weight: 400;
   }
 }
@@ -258,29 +274,29 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   flex: 1;
 
   .el-form-item {
-    margin-bottom: 24px;
+    margin-bottom: 18px;
   }
 
   .el-input {
-    height: 50px;
+    height: 46px;
 
     :deep(.el-input__wrapper) {
-      padding-left: 15px;
-      box-shadow: 0 0 0 1px rgba(0, 255, 170, 0.15) inset, 0 0 0 rgba(0, 0, 0, 0);
-      background-color: rgba(10, 25, 20, 0.5);
-      transition: box-shadow 0.2s ease, background-color 0.2s ease;
+      padding-left: 12px;
+      background-color: $input-bg;
+      box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.16) inset;
+      transition: box-shadow 0.2s ease, background-color 0.2s ease, transform 0.12s ease;
     }
 
     :deep(.el-input__prefix) {
-      color: #57e6c0;
+      color: lighten($accent, 12%);
       font-size: 18px;
     }
 
     :deep(.is-focus .el-input__wrapper),
     :deep(.el-input__wrapper.is-focus),
     :deep(.el-input__wrapper:hover) {
-      box-shadow: 0 0 0 1px rgba(0, 255, 170, 0.35) inset, 0 0 12px rgba(0, 255, 170, 0.25);
-      background-color: rgba(10, 25, 20, 0.65);
+      background-color: $input-bg-focus;
+      box-shadow: 0 0 0 1px rgba(150, 210, 255, 0.28) inset, 0 0 0 2px rgba(60, 199, 255, 0.32), 0 8px 24px rgba(0, 0, 0, 0.25);
     }
   }
 
@@ -289,9 +305,14 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
     right: 15px;
     top: 14px;
     font-size: 16px;
-    color: #84f0d3;
+    color: rgba(234, 241, 255, 0.65);
     cursor: pointer;
     user-select: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: rgba(234, 241, 255, 0.9);
+    }
   }
 }
 
@@ -300,23 +321,36 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   justify-content: flex-start;
   margin-bottom: 20px;
 
-  .forgot-password { display: none; }
+  .forgot-password {
+    display: none;
+  }
+
+  :deep(.el-checkbox__label) {
+    color: $text-muted;
+  }
 }
 
 .login-button {
   width: 100%;
-  height: 50px;
-  border-radius: 25px;
+  height: 46px;
+  border-radius: 14px;
   font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, #00d1a0 0%, #00ffcc 100%);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  background: linear-gradient(135deg, $accent 0%, $accent-2 100%);
   border: none;
+  color: #fff;
   margin-top: 10px;
+  box-shadow: 0 10px 24px rgba(60, 199, 255, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  transition: transform 0.08s ease, box-shadow 0.2s ease, filter 0.2s ease;
 
   &:hover {
-    background: linear-gradient(90deg, #00ffcc 0%, #00d1a0 100%);
-    box-shadow: 0 0 18px rgba(0, 255, 204, 0.35);
+    filter: brightness(1.05);
+    box-shadow: 0 14px 30px rgba(60, 199, 255, 0.36), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
 
@@ -327,11 +361,11 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   .demo-button {
     width: 100%;
     height: 40px;
-    border-radius: 25px;
+    border-radius: 12px;
     font-size: 14px;
-    background: rgba(0, 255, 170, 0.08);
-    border: 1px solid rgba(0, 255, 170, 0.25);
-    color: #9cf7e4;
+    background: rgba(122, 169, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #d9e6ff;
   }
 }
 
@@ -339,10 +373,10 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   margin-top: 20px;
   text-align: center;
   font-size: 14px;
-  color: #9bdacb;
+  color: $text-muted;
 
   .create-account {
-    color: #49f2c6;
+    color: lighten($accent, 10%);
     text-decoration: none;
     margin-left: 5px;
 
@@ -351,7 +385,6 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
     }
   }
 }
-
 
 /* 移除右侧图片列，视频已作为全局背景 */
 
@@ -373,12 +406,11 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   .login-box {
     width: 94vw;
     max-width: 460px;
+    border-radius: 14px;
   }
 
   .login-form-container {
-    padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 20px 16px 16px;
   }
 
   .logo-container {
@@ -410,7 +442,7 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   }
 
   .login-button {
-    height: 45px;
+    height: 44px;
     font-size: 15px;
     width: 100%;
   }
@@ -426,11 +458,10 @@ const { form, rules, loading, passwordType, redirect } = toRefs(state);
   }
 }
 
-// 添加额外的小屏幕适配
+// 额外小屏幕适配
 @media screen and (max-width: 375px) {
   .login-form-container {
-    padding: 15px 10px;
+    padding: 16px 12px;
   }
-
 }
 </style>
