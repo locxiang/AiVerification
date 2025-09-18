@@ -55,7 +55,7 @@
           <div class="rich-content">{{ detail.goal }}</div>
         </section>
         <section v-if="detail.scenarioType" class="rich-block">
-          <h3 class="rich-title">实验场景类型</h3>
+          <h3 class="rich-title">试验场景类型</h3>
           <div class="rich-content">
             <el-tag
               :type="getScenarioTypeTagType(detail.scenarioType)"

@@ -74,14 +74,14 @@ export const asyncRoutes = [
       },
     ],
   },
-  // 实验方案管理（沿用 experiments 下页面作为实现，后续可迁移文件路径）
+  // 试验方案管理（沿用 experiments 下页面作为实现，后续可迁移文件路径）
   {
     path: "/plans",
     component: Layout,
     redirect: "/plans/list",
     name: "Plans",
     meta: {
-      title: "实验方案管理",
+      title: "试验方案管理",
       icon: "file-alt",
     },
     children: [
@@ -151,20 +151,14 @@ export const asyncRoutes = [
       },
     ],
   },
-  // 实验任务管理
+  // 试验任务管理
   {
     path: "/tasks",
     component: Layout,
     redirect: "/tasks/list",
     name: "Tasks",
-    meta: { title: "实验任务管理", icon: "list-ul" },
+    meta: { title: "试验运行管理", icon: "list-ul" },
     children: [
-      {
-        path: "list",
-        name: "TaskList",
-        component: () => import("@/views/tasks/list.vue"),
-        meta: { title: "任务列表" },
-      },
       {
         path: ":id",
         name: "TaskDetail",

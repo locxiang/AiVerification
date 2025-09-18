@@ -14,7 +14,7 @@
         <el-col :xs="24" :sm="12" :md="6">
           <el-card class="stat-card" shadow="hover">
             <div class="stat-content">
-              <div class="stat-label">总实验数</div>
+              <div class="stat-label">总试验数</div>
               <div class="stat-value">{{ stats.total }}</div>
             </div>
           </el-card>
@@ -105,7 +105,7 @@
         <el-card class="action-card" shadow="hover" @click="goToNewExperiment">
           <div class="action-content">
             <el-icon class="action-icon"><Plus /></el-icon>
-            <div class="action-text">新建实验方案</div>
+            <div class="action-text">新建试验方案</div>
           </div>
         </el-card>
       </el-col>
@@ -113,7 +113,7 @@
         <el-card class="action-card" shadow="hover" @click="goToExperimentsList">
           <div class="action-content">
             <el-icon class="action-icon"><List /></el-icon>
-            <div class="action-text">实验方案列表</div>
+            <div class="action-text">试验方案列表</div>
           </div>
         </el-card>
       </el-col>

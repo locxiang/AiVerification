@@ -4,7 +4,7 @@
 
     <div class="resource-requirements-info">
       <el-alert
-        title="配置实验所需的人员、设备和基础数据集资源"
+        title="配置试验所需的人员、设备和基础数据集资源"
         type="info"
         :closable="false"
         show-icon

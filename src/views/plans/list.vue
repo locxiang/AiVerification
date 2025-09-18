@@ -3,7 +3,7 @@
     <el-card class="header-card">
       <template #header>
         <div class="card-header">
-          <h2 class="title">实验方案列表</h2>
+          <h2 class="title">试验方案列表</h2>
           <p class="subtitle">查询与管理全部能力试验</p>
         </div>
       </template>
@@ -15,7 +15,7 @@
           <el-col :xs="24" :sm="8" :md="6">
             <el-input
               v-model="queryParams.q"
-              placeholder="搜索实验方案名称/关键字"
+              placeholder="搜索试验方案名称/关键字"
               clearable
               @keyup.enter="handleSearch"
             >
@@ -68,11 +68,11 @@
 
     <el-card class="table-card">
       <div class="table-header">
-        <div class="table-title">实验方案列表</div>
+        <div class="table-title">试验方案列表</div>
         <div class="table-actions">
           <el-button type="primary" @click="goToNewExperiment">
             <el-icon><Plus /></el-icon>
-            新建实验方案
+            新建试验方案
           </el-button>
         </div>
       </div>
@@ -85,7 +85,7 @@
         stripe
         highlight-current-row
       >
-        <el-table-column prop="name" label="实验方案名称" min-width="180">
+        <el-table-column prop="name" label="试验方案名称" min-width="180">
           <template #default="{ row }">
             <router-link :to="`/plans/${row.id}/overview`" class="experiment-link">
               {{ row.name }}
@@ -200,8 +200,8 @@ const fetchData = async () => {
     tableData.value = res?.data?.list || []
     total.value = res?.data?.total || 0
   } catch (error) {
-    console.error('获取实验方案列表失败:', error)
-    ElMessage.error(error.message || '获取实验方案列表失败')
+    console.error('获取试验方案列表失败:', error)
+    ElMessage.error(error.message || '获取试验方案列表失败')
   } finally {
     loading.value = false
   }
@@ -257,7 +257,7 @@ const goToExperimentRun = (id) => {
 
 const handleDelete = (row) => {
   ElMessageBox.confirm(
-    `确定要删除实验"${row.name}"吗？`,
+    `确定要删除试验"${row.name}"吗？`,
     '删除确认',
     { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
   )

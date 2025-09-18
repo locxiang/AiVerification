@@ -567,7 +567,7 @@ const saveDatasetMapping = async () => {
 
     ElMessage.success('数据集映射保存成功')
 
-    // 可以在这里添加跳转逻辑，例如返回实验概览页面
+    // 可以在这里添加跳转逻辑，例如返回试验概览页面
   } catch (e) {
     console.error('保存失败:', e)
     ElMessage.error(e.message || '保存失败')

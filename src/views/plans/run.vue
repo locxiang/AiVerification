@@ -5,7 +5,7 @@
         <div class="card-header">
           <div class="header-left">
             <h2 class="title">执行与进度</h2>
-            <p class="subtitle">启动/继续实验执行，实时查看进度、资源与日志</p>
+            <p class="subtitle">启动/继续试验执行，实时查看进度、资源与日志</p>
           </div>
           <div class="header-actions">
             <el-button-group>

@@ -3,7 +3,7 @@
     <el-card class="header-card">
       <template #header>
         <div class="card-header">
-          <h2 class="title">新建实验方案</h2>
+          <h2 class="title">新建试验方案</h2>
           <p class="subtitle">通过分步向导创建能力试验方案</p>
         </div>
       </template>
@@ -296,11 +296,11 @@ const loadTemplate = (templateId) => {
 const validateStep = (step) => {
   if (step === 0) {
     if (!formData.name) {
-      ElMessage.warning('请填写实验方案名称')
+      ElMessage.warning('请填写试验方案名称')
       return false
     }
     if (!formData.type) {
-      ElMessage.warning('请选择实验类型')
+      ElMessage.warning('请选择试验类型')
       return false
     }
     return true
@@ -356,7 +356,7 @@ const prevStep = () => {
   }
 }
 
-// 监听实验类型变化，自动调整步骤
+// 监听试验类型变化，自动调整步骤
 watch(() => formData.type, (newType) => {
   // 若在“数据需求”（索引 3）时切换为非静态评估，自动跳到“资源需求”（索引 4）
   if (currentStep.value === 3 && newType !== 'static_evaluation') {
@@ -382,7 +382,7 @@ const updateFlow = (flow) => { formData.experimentFlow = flow }
 const updateDataRequirements = (requirements) => { formData.dataRequirements = requirements }
 const updateResourceRequirements = (requirements) => { formData.resourceRequirements = requirements }
 
-// 创建实验
+// 创建试验
 const isCreating = ref(false)
 const createExperiment = async () => {
   isCreating.value = true
@@ -418,7 +418,7 @@ const createExperiment = async () => {
       await idbDelete(db, DB_NAMES.drafts, key)
     } catch {}
 
-    ElMessage.success('实验创建成功')
+    ElMessage.success('试验创建成功')
     if (formData.createTask) {
       router.push(`/plans/${experimentId}/run`)
     } else {

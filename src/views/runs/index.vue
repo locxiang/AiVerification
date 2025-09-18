@@ -23,7 +23,7 @@
 
       <el-table :data="filteredRuns" border stripe>
         <el-table-column prop="id" label="运行ID" width="140" />
-        <el-table-column prop="name" label="名称" min-width="200" />
+        <el-table-column prop="planName" label="试验方案名称" min-width="220" />
         <el-table-column prop="status" label="状态" width="120">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status)">{{ getStatusText(row.status) }}</el-tag>
@@ -44,7 +44,7 @@
         <el-table-column label="操作" width="180" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" text @click="goToRun(row)">查看</el-button>
-            <el-button text @click="goToExperiment(row)">实验</el-button>
+            <el-button text @click="goToExperiment(row)">试验</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -74,9 +74,9 @@ const pageSize = ref(10)
 const total = ref(0)
 
 const runs = ref([
-  { id: 'r_1005', name: '社交机器人V1综合评测', status: 'running', startedAt: '2025-01-02 09:10', endedAt: '', durationSec: 320, triggeredBy: '张三', experimentId: 'e_1001' },
-  { id: 'r_1004', name: '对话理解-鲁棒性回归', status: 'completed', startedAt: '2025-01-01 10:00', endedAt: '2025-01-01 10:10', durationSec: 600, triggeredBy: '李四', experimentId: 'e_1000' },
-  { id: 'r_1003', name: '舆论引导回归', status: 'failed', startedAt: '2024-12-31 16:00', endedAt: '2024-12-31 16:03', durationSec: 180, triggeredBy: '王五', experimentId: 'e_0999' }
+  { id: 'r_1005', planName: '社交机器人V1方案', status: 'running', startedAt: '2025-01-02 09:10', endedAt: '', durationSec: 320, triggeredBy: '张三', experimentId: 'e_1001' },
+  { id: 'r_1004', planName: '对话理解鲁棒性方案', status: 'completed', startedAt: '2025-01-01 10:00', endedAt: '2025-01-01 10:10', durationSec: 600, triggeredBy: '李四', experimentId: 'e_1000' },
+  { id: 'r_1003', planName: '舆论引导评测方案', status: 'failed', startedAt: '2024-12-31 16:00', endedAt: '2024-12-31 16:03', durationSec: 180, triggeredBy: '王五', experimentId: 'e_0999' }
 ])
 
 const filteredRuns = computed(() => {

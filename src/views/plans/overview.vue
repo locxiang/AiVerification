@@ -4,8 +4,8 @@
       <template #header>
         <div class="card-header">
           <div class="header-left">
-            <h2 class="title">{{ experiment?.name || '实验总览' }}</h2>
-            <p class="subtitle">实验关键信息与快捷操作</p>
+            <h2 class="title">{{ experiment?.name || '试验总览' }}</h2>
+            <p class="subtitle">试验关键信息与快捷操作</p>
           </div>
           <div class="header-actions">
             <el-button-group>
@@ -60,13 +60,13 @@
                 <el-collapse v-model="activeNames" class="confirm-collapse">
                   <el-collapse-item title="基本信息" name="basic">
                     <el-descriptions :column="2" border>
-                      <el-descriptions-item label="实验方案名称">{{ experiment?.name || '-' }}</el-descriptions-item>
-                      <el-descriptions-item label="实验类型">{{ getExperimentTypeName(experiment?.type) }}</el-descriptions-item>
+                      <el-descriptions-item label="试验方案名称">{{ experiment?.name || '-' }}</el-descriptions-item>
+                      <el-descriptions-item label="试验类型">{{ getExperimentTypeName(experiment?.type) }}</el-descriptions-item>
                       <el-descriptions-item label="负责人">{{ experiment?.owner || '-' }}</el-descriptions-item>
                       <el-descriptions-item label="使用模板">
                         {{ experiment?.template?.name ? (experiment.template.name + '（v' + experiment.template.version + '）') : '不使用模板' }}
                       </el-descriptions-item>
-                      <el-descriptions-item label="实验描述" :span="2">{{ experiment?.description || '无' }}</el-descriptions-item>
+                      <el-descriptions-item label="试验描述" :span="2">{{ experiment?.description || '无' }}</el-descriptions-item>
                     </el-descriptions>
                   </el-collapse-item>
 

@@ -4,7 +4,7 @@
 
     <div class="confirm-info">
       <el-alert
-        title='请确认以下实验方案信息，确认无误后点击“确认创建”按钮'
+        title='请确认以下试验方案信息，确认无误后点击“确认创建”按钮'
         type="info"
         :closable="false"
         show-icon
@@ -14,11 +14,11 @@
     <el-collapse v-model="activeNames" class="confirm-collapse">
       <el-collapse-item title="基本信息" name="basic">
         <el-descriptions :column="2" border>
-          <el-descriptions-item label="实验方案名称">{{ formData.name }}</el-descriptions-item>
-          <el-descriptions-item label="实验类型">{{ getExperimentTypeName(formData.type) }}</el-descriptions-item>
+          <el-descriptions-item label="试验方案名称">{{ formData.name }}</el-descriptions-item>
+          <el-descriptions-item label="试验类型">{{ getExperimentTypeName(formData.type) }}</el-descriptions-item>
           <el-descriptions-item label="负责人">{{ formData.responsiblePerson }}</el-descriptions-item>
           <el-descriptions-item label="使用模板">{{ getTemplateName(formData.templateId) }}</el-descriptions-item>
-          <el-descriptions-item label="实验描述" :span="2">{{ formData.description || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="试验描述" :span="2">{{ formData.description || '无' }}</el-descriptions-item>
         </el-descriptions>
       </el-collapse-item>
 
@@ -179,12 +179,12 @@
       <el-form label-position="top">
         <el-form-item label="保存为模板">
           <el-switch v-model="localSaveAsTemplate" />
-          <div class="option-help">保存为模板后，可在创建新实验时直接使用此模板</div>
+          <div class="option-help">保存为模板后，可在创建新试验时直接使用此模板</div>
         </el-form-item>
 
         <el-form-item label="创建后直接进入试验任务">
           <el-switch v-model="localCreateTask" />
-          <div class="option-help">开启后，创建实验完成后将直接进入试验任务页面</div>
+          <div class="option-help">开启后，创建试验完成后将直接进入试验任务页面</div>
         </el-form-item>
       </el-form>
     </div>
@@ -234,7 +234,7 @@ const hasWeights = computed(() => {
   return Object.keys(weights).length > 0 && props.formData.indicators.indicatorIds.some(id => weights[id] > 0)
 })
 
-// 模拟数据 - 实验类型名称映射
+// 模拟数据 - 试验类型名称映射
 const getExperimentTypeName = (type) => {
   const typeMap = {
     'static_evaluation': '静态评估',

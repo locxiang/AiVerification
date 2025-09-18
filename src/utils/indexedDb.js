@@ -14,15 +14,32 @@ function openDB() {
   })
 }
 
-export async function idbGet(key) {
-  const db = await openDB()
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, "readonly")
-    const store = tx.objectStore(STORE)
-    const req = store.get(key)
-    req.onsuccess = () => resolve(req.result)
-    req.onerror = () => reject(req.error)
-  })
+export async function idbGet(...args) {
+  // 兼容两种用法：
+  // 1) idbGet(key) => 读取默认 STORE("pump")
+  // 2) idbGet(db, storeName, key) => 使用传入的 db 与仓库名
+  if (args.length === 1) {
+    const [key] = args
+    const db = await openDB()
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, "readonly")
+      const store = tx.objectStore(STORE)
+      const req = store.get(key)
+      req.onsuccess = () => resolve(req.result)
+      req.onerror = () => reject(req.error)
+    })
+  }
+  if (args.length >= 3) {
+    const [db, storeName, key] = args
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(storeName, "readonly")
+      const store = tx.objectStore(storeName)
+      const req = store.get(key)
+      req.onsuccess = () => resolve(req.result ?? null)
+      req.onerror = () => reject(req.error)
+    })
+  }
+  return Promise.reject(new TypeError("idbGet 参数不合法。期望 1 个参数(key) 或 3 个参数(db, storeName, key)"))
 }
 
 export async function idbSet(key, value) {

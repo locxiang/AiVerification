@@ -5,7 +5,7 @@
         <div class="header">
           <div>
             <h3 class="title">模板管理</h3>
-            <p class="desc">复用常用配置，快速创建实验方案</p>
+            <p class="desc">复用常用配置，快速创建试验方案</p>
           </div>
           <div></div>
         </div>

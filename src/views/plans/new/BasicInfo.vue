@@ -3,27 +3,27 @@
     <h3 class="step-title">基本信息</h3>
 
     <el-form label-position="top" :model="localFormData" label-width="100px">
-      <el-form-item label="实验方案名称" required>
+      <el-form-item label="试验方案名称" required>
         <el-input
           v-model="localFormData.name"
-          placeholder="请输入实验方案名称"
+          placeholder="请输入试验方案名称"
           clearable
         />
       </el-form-item>
 
-      <el-form-item label="实验描述">
+      <el-form-item label="试验描述">
         <el-input
           v-model="localFormData.description"
           type="textarea"
           :rows="4"
-          placeholder="请输入实验描述"
+          placeholder="请输入试验描述"
         />
       </el-form-item>
 
-      <el-form-item label="实验类型" required>
+      <el-form-item label="试验类型" required>
         <el-select
           v-model="localFormData.type"
-          placeholder="请选择实验类型"
+          placeholder="请选择试验类型"
           style="width: 100%"
         >
           <el-option

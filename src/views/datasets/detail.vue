@@ -18,7 +18,7 @@
 
       <div class="mt-3 actions-row">
         <el-space>
-          <el-button type="primary" @click="associateToExperiment">关联到实验</el-button>
+          <el-button type="primary" @click="associateToExperiment">关联到试验</el-button>
           <el-button @click="fillWithExample">填充示例数据</el-button>
           <el-button @click="clearAll">清空输入</el-button>
         </el-space>

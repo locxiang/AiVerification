@@ -11,7 +11,7 @@
         <el-table-column prop="id" label="体系ID" width="120" />
         <el-table-column prop="name" label="体系名称" min-width="220" />
         <el-table-column prop="purpose" label="试验目的" min-width="220" show-overflow-tooltip />
-        <el-table-column prop="scenarioType" label="实验场景类型" width="160">
+        <el-table-column prop="scenarioType" label="试验场景类型" width="160">
           <template #default="{ row }">
             <el-tag
               :type="getScenarioTypeTagType(row.scenarioType)"
